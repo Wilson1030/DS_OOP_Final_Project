@@ -1,6 +1,6 @@
 package question7;
 
-public class Person implements Payer{
+public abstract class Person implements Payer{
 	private String name;
 	private int debt;
 
