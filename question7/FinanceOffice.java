@@ -1,6 +1,59 @@
 package question7;
 
+import java.util.ArrayList;
+
 public class FinanceOffice {
+	private String name;
+	private ArrayList<Payer> payers = new ArrayList<>();
+
+	// Parametrical construction
+	public FinanceOffice() {}
+
+	// To build FinanceOffice
+	public FinanceOffice(String name) {
+		this.name = name;
+	}
+
+	// To build addPayer
+	public void addPayer(Payer payer) {
+		payers.add(payer);
+	}
+
+	// To build getDebt
+	public int getDebt(String name) throws UnknownPayerException {
+		// To find the name whether exist or not
+		for (Payer payer : payers) {
+			if (name.equals(payer.getName())) {
+				return payer.getDebt();
+			}
+		}
+		throw new UnknownPayerException("Payer " + name + " unknown");
+	}
+
+	// To build totalDebt
+	public int totalDebt() {
+		int count = 0;
+		for (int i = 0; i < payers.size(); i++) {
+			count += payers.get(i).getDebt();
+		}
+		return count;
+	}
+	
+	// To build pay
+	public void pay(String name, int debt) throws UnknownPayerException, NegativeSalaryException{
+		// To find the name whether exist or not
+		for (Payer payer : payers) {
+			if (name.equals(payer.getName())) {
+				if (debt + payer.getDebt() > 0) {
+					throw new NegativeSalaryException("An employee cannot be overpaid by " + (debt + payer.getDebt()) + " yuans!");
+				}
+				payer.pay(debt);
+				return;
+			}
+		}
+		throw new UnknownPayerException("Payer " + name + " unknown");	
+	}
+	
 	public static void testFinanceOffice() {
 		FinanceOffice f = new FinanceOffice("UIC FO");
 

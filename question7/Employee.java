@@ -1,6 +1,26 @@
 package question7;
 
-public class Employee {
+public class Employee extends Person{
+	// Parametrical construction
+	public Employee() {}
+
+	// to build Employee
+	public Employee(String name, int salary) throws NegativeSalaryException{
+		super(name, salary);
+		if (salary < 0) {
+			throw new NegativeSalaryException("An employee cannot have a negative salary!");
+		}
+		setDebt(-salary);
+	}
+
+	@Override
+	public void pay(int amount) throws NegativeSalaryException{
+		if (amount + getDebt() > 0) {
+			throw new NegativeSalaryException("An employee cannot be overpaid by " + (amount + getDebt()) + " yuans!");
+		}
+		setDebt(amount + getDebt());
+	}
+
 
 	public static void testEmployee() {
 		try {
