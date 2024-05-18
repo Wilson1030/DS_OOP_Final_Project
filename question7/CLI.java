@@ -32,7 +32,7 @@ public class CLI {
 		}
 	}
 
-	public static void main(String[] args) throws NegativeSalaryException {
+	public static void main(String[] args) throws NegativeSalaryException, UnknownPayerException {
 		// Create the single FinanceOffice object
 		FinanceOffice FO = new FinanceOffice("UIC FO");
 		while(true) {
@@ -70,6 +70,10 @@ public class CLI {
 					}
 					break;
 				case 3:
+					String choice_3 = readLine("Enter the name of the payer:");
+					// To find whether the name exist
+					int answer_1 = FO.getDebt(choice_3);
+					System.out.println("");
 					break;
 				case 4:
 					break;
