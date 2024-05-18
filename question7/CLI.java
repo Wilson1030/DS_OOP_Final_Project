@@ -73,7 +73,7 @@ public class CLI {
 					String choice_3 = readLine("Enter the name of the payer:");
 					// To find whether the name exist
 					int answer_1 = FO.getDebt(choice_3);
-					System.out.println("");
+					System.out.println(" " + answer_1 + " ");
 					break;
 				case 4:
 					break;
