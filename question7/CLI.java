@@ -36,7 +36,7 @@ public class CLI {
 		// Create the single FinanceOffice object
 		FinanceOffice FO = new FinanceOffice("UIC FO");
 		while(true) {
-			int choice_1 = readPosInt("Type an action (total:1 add:2 get:3 give:4 take:5 quit:6):");
+			int choice_1 = readPosInt("Type an action (total:1 add:2 get:3 give:4 take:5 quit:6): ");
 			switch (choice_1) {
 				case 1:
 					FO.totalDebt();
@@ -45,22 +45,22 @@ public class CLI {
 					int choice_2 = readPosInt("Enter the payer type (student:1 employee:2 faculty member:3)");
 					switch(choice_2) {
 						case 1:
-							String student = readLine("Enter the name of the payer:");
-							int amount_1 = readPosInt("Enter the initial amount of money:");
+							String student = readLine("Enter the name of the payer: ");
+							int amount_1 = readPosInt("Enter the initial amount of money: ");
 							Student stu = new Student(student, amount_1);
 							System.out.println("Student \"" + stu.getName() + "\" with " + stu.getDebt() + " yuans of debt added");
 							FO.addPayer(stu);
 							break;
 						case 2:
-							String employee = readLine("Enter the name of the payer:");
-							int amount_2 = readPosInt("Enter the initial amount of money:");
+							String employee = readLine("Enter the name of the payer: ");
+							int amount_2 = readPosInt("Enter the initial amount of money: ");
 							Employee ep = new Employee(employee, amount_2);
 							System.out.println("Employee \"" + ep.getName() + "\" with " + (-ep.getDebt()) + " yuans of salary added");
 							FO.addPayer(ep);
 							break;
 						case 3:
-							String facultyMember = readLine("Enter the name of the payer:");
-							int amount_3 = readPosInt("Enter the initial amount of money:");
+							String facultyMember = readLine("Enter the name of the payer: ");
+							int amount_3 = readPosInt("Enter the initial amount of money: ");
 							FacultyMember fm = new FacultyMember(facultyMember, amount_3);
 							System.out.println("Faculty member \"" + fm.getName() + "\" with " + (-fm.getDebt()) + " yuans of salary added");
 							break;
@@ -70,12 +70,15 @@ public class CLI {
 					}
 					break;
 				case 3:
-					String choice_3 = readLine("Enter the name of the payer:");
+					String choice_3 = readLine("Enter the name of the payer: ");
 					// To find whether the name exist
 					int answer_1 = FO.getDebt(choice_3);
 					System.out.println(choice_3 + " has " + answer_1 + " yuans of debt");
 					break;
 				case 4:
+					String choice_4 = readLine("Enter the name of the payer: ");
+					int amount_4 = readPosInt("Enter the amount of money: ");
+					FO.pay(choice_4, amount_4);
 					break;
 				case 5:
 					break;
