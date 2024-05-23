@@ -1,9 +1,9 @@
 package question9;
 
 public class Controller {
-	protected FinanceOffice m;
+    protected FinanceOffice m;
 
-	public Controller(FinanceOffice m) {
-		this.m = m;
-	}
+    public Controller(FinanceOffice m) {
+        this.m = m;
+    }
 }

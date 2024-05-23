@@ -21,6 +21,10 @@ public class Employee extends Person{
 		setDebt(amount + getDebt());
 	}
 
+	// To build take
+	public void take(int amount) {
+		setDebt(getDebt() - amount);
+	}
 
 	public static void testEmployee() {
 		try {

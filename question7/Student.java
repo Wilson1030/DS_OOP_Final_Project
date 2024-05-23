@@ -11,6 +11,11 @@ public class Student extends Person{
 		setDebt(getDebt() - amount);
 	}
 
+	// To build take
+	public void take(int amount) throws NegativeSalaryException{
+		setDebt(getDebt() + amount);
+	}
+
 	public static void testStudent() {
 		try {
 			Student s = new Student("Ms. Li", 10000);

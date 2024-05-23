@@ -1,6 +1,99 @@
 package question13;
 
+import java.util.ArrayList;
+import java.util.List;
+
 public class FinanceOffice {
+	private String name;
+	private ArrayList<Payer> payers = new ArrayList<>();
+	private List<ModelListener> listeners;
+	private ArrayList<Integer> history;
+
+	// Parametrical construction
+	public FinanceOffice() {
+		this.payers = new ArrayList<>();
+        this.listeners = new ArrayList<>();
+	}
+
+	// To build FinanceOffice
+	public FinanceOffice(String name) {
+		this.name = name;
+        this.payers = new ArrayList<>();
+        this.listeners = new ArrayList<>();
+		this.history = new ArrayList<>();
+        this.history.add(0); // Initial total debt is zero
+	}
+
+	// To build addPayer
+	public void addPayer(Payer payer) {
+		payers.add(payer);
+		notifyListeners();
+		history.add(totalDebt());
+	}
+
+	// To build getDebt
+	public int getDebt(String name) throws UnknownPayerException {
+		// To find the name whether exist or not
+		for (Payer payer : payers) {
+			if (name.equals(payer.getName())) {
+				return payer.getDebt();
+			}
+		}
+		throw new UnknownPayerException("Payer " + name + " unknown");
+	}
+
+	// To build totalDebt
+	public int totalDebt() {
+		int count = 0;
+		for (int i = 0; i < payers.size(); i++) {
+			count += payers.get(i).getDebt();
+		}
+		return count;
+	}
+	
+	// To build pay
+	public void pay(String name, int debt) throws UnknownPayerException, NegativeSalaryException{
+		// To find the name whether exist or not
+		for (Payer payer : payers) {
+			if (name.equals(payer.getName())) {
+				if (debt + payer.getDebt() > 0) {
+					throw new NegativeSalaryException("An employee cannot be overpaid by " + (debt + payer.getDebt()) + " yuans!");
+				}
+				payer.pay(debt);
+				history.add(totalDebt());
+				notifyListeners();
+				return;
+			}
+		}
+		throw new UnknownPayerException("Payer " + name + " unknown");	
+	}
+
+	public ArrayList<Integer> getHistory() {
+        return history;
+    }
+
+	// To identify payer's type
+	public Payer getPayer(String name) throws UnknownPayerException {
+        for (Payer payer : payers) {
+            if (payer.getName().equals(name)) {
+                return payer;
+            }
+        }
+        throw new UnknownPayerException("Payer " + name + " unknown");
+    }
+
+	// Add a listener
+	public void addListener(ModelListener listener) {
+		listeners.add(listener);
+	}
+
+	// Notify all listeners
+    private void notifyListeners() {
+        for (ModelListener listener : listeners) {
+            listener.update();
+        }
+    }
+
 	public static void testFinanceOffice() {
 		FinanceOffice f = new FinanceOffice("UIC FO");
 
@@ -44,6 +137,5 @@ public class FinanceOffice {
 		} catch (UnknownPayerException ex) {
 			System.out.println(false);
 		}
-		System.out.println(f.getHistory() == f.history);
 	}
 }

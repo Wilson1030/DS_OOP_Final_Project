@@ -53,6 +53,16 @@ public class FinanceOffice {
 		}
 		throw new UnknownPayerException("Payer " + name + " unknown");	
 	}
+
+	// To identify payer's type
+	public Payer getPayer(String name) throws UnknownPayerException {
+        for (Payer payer : payers) {
+            if (payer.getName().equals(name)) {
+                return payer;
+            }
+        }
+        throw new UnknownPayerException("Payer " + name + " unknown");
+    }
 	
 	public static void testFinanceOffice() {
 		FinanceOffice f = new FinanceOffice("UIC FO");

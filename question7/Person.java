@@ -1,6 +1,6 @@
 package question7;
 
-public abstract class Person implements Payer{
+public class Person implements Payer{
 	private String name;
 	private int debt;
 
@@ -29,7 +29,7 @@ public abstract class Person implements Payer{
 	}
 
 	@Override
-	public abstract void pay(int amount) throws NegativeSalaryException;
+	public void pay(int amount) throws NegativeSalaryException {};
 
 
 	public static void testPerson() {

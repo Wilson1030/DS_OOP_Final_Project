@@ -1,6 +1,20 @@
 package question8;
 
-public class Student {
+public class Student extends Person{
+	// to build Student
+	public Student(String name, int debt) {
+		super(name, debt);
+	}
+
+	@Override
+	public void pay(int amount) throws NegativeSalaryException{
+		setDebt(getDebt() - amount);
+	}
+
+	// To build take
+	public void take(int amount) throws NegativeSalaryException{
+		setDebt(getDebt() + amount);
+	}
 
 	public static void testStudent() {
 		try {

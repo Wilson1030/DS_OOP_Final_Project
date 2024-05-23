@@ -1,6 +1,22 @@
 package question9;
 
-public class FacultyMember {
+public class FacultyMember extends Employee{
+	// Parametrical construction
+	public FacultyMember() {}
+
+	// to build FacultyMember
+	public FacultyMember(String name, int salary) throws NegativeSalaryException{
+		super(name, salary);
+		if (salary < 0) {
+			throw new NegativeSalaryException("An employee cannot have a negative salary!");
+		}
+		setDebt(-salary);
+	}
+
+	@Override
+	public void pay(int amount) {
+		setDebt(amount + getDebt());
+	}
 
 	public static void testFacultyMember() {
 		try {
