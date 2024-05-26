@@ -96,6 +96,7 @@ public class CLI {
 					} catch (NegativeSalaryException e) {
 						System.out.println("An employee cannot be overpaid by " + (amount_4 + FO.getDebt(choice_4)) + " yuans!");
 					}
+					break;
 				case 5:
 					String choice_5 = readLine("Enter the name of the payer: ");
 					int amount_5 = readPosInt("Enter the amount of money: ");

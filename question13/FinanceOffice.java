@@ -55,12 +55,19 @@ public class FinanceOffice {
 	public void pay(String name, int debt) throws UnknownPayerException, NegativeSalaryException{
 		// To find the name whether exist or not
 		for (Payer payer : payers) {
-			if (name.equals(payer.getName())) {
-				if (debt + payer.getDebt() > 0) {
+			if (getPayer(name) instanceof Student stu) {
+				stu.pay(debt);
+				notifyListeners();
+				return;
+			} else if (getPayer(name) instanceof Employee ep) {
+				if (-debt + payer.getDebt() > 0) {
 					throw new NegativeSalaryException("An employee cannot be overpaid by " + (debt + payer.getDebt()) + " yuans!");
 				}
-				payer.pay(debt);
-				history.add(totalDebt());
+				ep.pay(debt);
+				notifyListeners();
+				return;
+			} else if (getPayer(name) instanceof FacultyMember fm) {
+				fm.pay(debt);
 				notifyListeners();
 				return;
 			}

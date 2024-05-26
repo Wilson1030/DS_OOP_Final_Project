@@ -48,18 +48,20 @@ public class HistoryPanel extends JPanel {
         int maxY = getHeight() - 1;
         int zero = maxY + min * maxY / range;
 
-        // Draw zero axis
         g.setColor(Color.BLUE);
+        
+        // Draw zero line
         g.drawLine(0, zero, maxX, zero);
-
-        // Draw history
+        
         g.setColor(Color.RED);
+        
+        // Draw red line representing total debt
         for (int i = 0; i < history.size(); i++) {
             int x = 10 * i;
-            int y = zero - history.get(i) * maxY / range;
+            int y = zero - (history.get(i) * maxY / range);
             if (i > 0) {
                 int prevX = 10 * (i - 1);
-                int prevY = zero - history.get(i - 1) * maxY / range;
+                int prevY = zero - (history.get(i - 1) * maxY / range);
                 g.drawLine(prevX, prevY, x, y);
             } else {
                 g.fillRect(x, y, 1, 1);

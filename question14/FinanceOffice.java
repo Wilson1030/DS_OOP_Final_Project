@@ -1,6 +1,149 @@
 package question14;
 
-public class FinanceOffice {
+import java.io.*;
+import java.util.ArrayList;
+import java.util.List;
+
+public class FinanceOffice  implements Serializable {
+	private String name;
+    private static final long serialVersionUID = 1L;
+    private ArrayList<Payer> payers;
+    private List<ModelListener> listeners;
+    private ArrayList<Integer> history;
+    private transient File file;
+
+	// Parametrical construction
+	public FinanceOffice() {
+		this.payers = new ArrayList<>();
+        this.listeners = new ArrayList<>();
+	}
+
+	// Parametrized constructor
+    public FinanceOffice(String name) {
+        this.name = name;
+        this.file = new File(name + ".bin");
+        if (file.exists()) {
+            try (ObjectInputStream in = new ObjectInputStream(new FileInputStream(file))) {
+                this.payers = (ArrayList<Payer>) in.readObject();
+                this.history = (ArrayList<Integer>) in.readObject();
+            } catch (IOException | ClassNotFoundException e) {
+                this.payers = new ArrayList<>();
+                this.history = new ArrayList<>();
+                this.history.add(0); // Initial total debt is zero
+            }
+        } else {
+            this.payers = new ArrayList<>();
+            this.history = new ArrayList<>();
+            this.history.add(0); // Initial total debt is zero
+        }
+        this.listeners = new ArrayList<>();
+    }
+
+	// To build addPayer
+	public void addPayer(Payer payer) {
+		payers.add(payer);
+		notifyListeners();
+		history.add(totalDebt());
+	}
+
+	// To build getDebt
+	public int getDebt(String name) throws UnknownPayerException {
+		// To find the name whether exist or not
+		for (Payer payer : payers) {
+			if (name.equals(payer.getName())) {
+				return payer.getDebt();
+			}
+		}
+		throw new UnknownPayerException("Payer " + name + " unknown");
+	}
+
+	// To build totalDebt
+	public int totalDebt() {
+		int count = 0;
+		for (int i = 0; i < payers.size(); i++) {
+			count += payers.get(i).getDebt();
+		}
+		return count;
+	}
+	
+	// To build pay
+	public void pay(String name, int debt) throws UnknownPayerException, NegativeSalaryException{
+		// To find the name whether exist or not
+		for (Payer payer : payers) {
+			if (getPayer(name) instanceof Student stu) {
+				stu.pay(debt);
+				notifyListeners();
+				return;
+			} else if (getPayer(name) instanceof Employee ep) {
+				if (-debt + payer.getDebt() > 0) {
+					throw new NegativeSalaryException("An employee cannot be overpaid by " + (debt + payer.getDebt()) + " yuans!");
+				}
+				ep.pay(debt);
+				notifyListeners();
+				return;
+			} else if (getPayer(name) instanceof FacultyMember fm) {
+				fm.pay(debt);
+				notifyListeners();
+				return;
+			}
+		}
+		throw new UnknownPayerException("Payer " + name + " unknown");	
+	}
+
+	public ArrayList<Integer> getHistory() {
+        return history;
+    }
+
+	// To identify payer's type
+	public Payer getPayer(String name) throws UnknownPayerException {
+        for (Payer payer : payers) {
+            if (payer.getName().equals(name)) {
+                return payer;
+            }
+        }
+        throw new UnknownPayerException("Payer " + name + " unknown");
+    }
+
+	// Add a listener
+	public void addListener(ModelListener listener) {
+		listeners.add(listener);
+	}
+
+	// Notify all listeners
+    private void notifyListeners() {
+        for (ModelListener listener : listeners) {
+            listener.update();
+        }
+    }
+
+    // Save data to file
+    public void saveData() {
+        try (ObjectOutputStream out = new ObjectOutputStream(new FileOutputStream(file))) {
+            out.writeObject(payers);
+            out.writeObject(history);
+        } catch (IOException e) {
+            System.out.println("Error saving data: " + e.getMessage());
+        }
+    }
+
+	// Load data from file
+    public static FinanceOffice loadData(String name) {
+        File file = new File(name + ".bin");
+        if (file.exists()) {
+            try (ObjectInputStream in = new ObjectInputStream(new FileInputStream(file))) {
+                FinanceOffice financeOffice = new FinanceOffice(name);
+                financeOffice.payers = (ArrayList<Payer>) in.readObject();
+                financeOffice.history = (ArrayList<Integer>) in.readObject();
+                return financeOffice;
+            } catch (IOException | ClassNotFoundException e) {
+                System.out.println("Error loading data: " + e.getMessage());
+                return new FinanceOffice(name);
+            }
+        } else {
+            return new FinanceOffice(name);
+        }
+    }
+
 	public static void testFinanceOffice() {
 		FinanceOffice f = new FinanceOffice("UIC FO");
 
@@ -44,6 +187,5 @@ public class FinanceOffice {
 		} catch (UnknownPayerException ex) {
 			System.out.println(false);
 		}
-		System.out.println(f.getHistory() == f.history);
 	}
 }
